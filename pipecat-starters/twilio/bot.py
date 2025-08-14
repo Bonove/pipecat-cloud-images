@@ -14,6 +14,7 @@ from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
 from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
+from pipecat.processors.aggregators.dtmf_aggregator import DTMFAggregator
 from pipecat.runner.types import RunnerArguments
 from pipecat.runner.utils import parse_telephony_websocket
 from pipecat.services.cartesia.tts import CartesiaTTSService
@@ -48,7 +49,8 @@ async def run_bot(transport: BaseTransport):
     messages = [
         {
             "role": "system",
-            "content": "You are Chatbot, a friendly, helpful robot. Your goal is to demonstrate your capabilities in a succinct way. Your output will be converted to audio so don't include special characters in your answers. Respond to what the user said in a creative and helpful way, but keep your responses brief. Start by introducing yourself.",
+            "content": "You are Samantha, a friendly, helpful service assistant, providing every service the customer needs. Your goal is to demonstrate your capabilities in a succinct way. Your output will be converted to audio so don't include special characters in your answers. Respond to what the user said in a creative and helpful way, but keep your responses brief. Start by introducing yourself. If you receive a transcription that starts with 'DTMF: ', treat it as keypad input that can appear mid-conversation. Expect a 4-digit code followed by '#', e.g., 'DTMF: 1234#'. When such input is received, extract the 4 digits and acknowledge them succinctly, then continue the conversation.",
+            
         },
     ]
 
@@ -61,9 +63,11 @@ async def run_bot(transport: BaseTransport):
 
     # A core voice AI pipeline
     # Add additional processors to customize the bot's behavior
+    dtmf = DTMFAggregator(timeout=5.0)
     pipeline = Pipeline(
         [
             transport.input(),
+            dtmf,
             stt,
             context_aggregator.user(),
             llm,
