@@ -105,12 +105,13 @@ async def bot(runner_args: RunnerArguments):
 
     transport = None
 
+    krisp_filter = None
     if os.environ.get("ENV") != "local":
-        from pipecat.audio.filters.krisp_filter import KrispFilter
-
-        krisp_filter = KrispFilter()
-    else:
-        krisp_filter = None
+        try:
+            from pipecat.audio.filters.krisp_filter import KrispFilter
+            krisp_filter = KrispFilter()
+        except Exception as e:
+            logger.warning(f"Krisp filter niet beschikbaar ({e}); ga door zonder noise suppression")
 
     transport_type, call_data = await parse_telephony_websocket(runner_args.websocket)
     logger.info(f"Auto-detected transport: {transport_type}")
