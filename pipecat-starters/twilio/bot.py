@@ -17,7 +17,7 @@ from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
 from pipecat.processors.aggregators.dtmf_aggregator import DTMFAggregator
 from pipecat.runner.types import RunnerArguments
 from pipecat.runner.utils import parse_telephony_websocket
-from pipecat.services.cartesia.tts import CartesiaTTSService
+from pipecat.services.elevenlabs.tts import ElevenLabsTTSService
 from pipecat.services.deepgram.stt import DeepgramSTTService
 from pipecat.services.openai.llm import OpenAILLMService
 from pipecat.transports.base_transport import BaseTransport
@@ -39,9 +39,10 @@ async def run_bot(transport: BaseTransport):
     # Swap out different processors or properties to customize your bot
     stt = DeepgramSTTService(api_key=os.getenv("DEEPGRAM_API_KEY"))
     llm = OpenAILLMService(api_key=os.getenv("OPENAI_API_KEY"), model="gpt-4o")
-    tts = CartesiaTTSService(
-        api_key=os.getenv("CARTESIA_API_KEY"),
-        voice_id="71a7ad14-091c-4e8e-a314-022ece01c121",  # British Reading Lady
+    tts = ElevenLabsTTSService(
+        api_key=os.getenv("ELEVENLABS_API_KEY"),
+        voice_id=os.getenv("ELEVENLABS_VOICE_ID"),
+        model="eleven_flash_v2_5",
     )
 
     # Set up the initial context for the conversation
@@ -51,7 +52,9 @@ async def run_bot(transport: BaseTransport):
             "role": "system",
             "content": "You are Samantha, a friendly, helpful service assistant, providing every service the customer needs. Your goal is to demonstrate your capabilities in a succinct way. Your output will be converted to audio so don't include special characters in your answers. Respond to what the user said in a creative and helpful way, but keep your responses brief. Start by introducing yourself. If you receive a transcription that starts with 'DTMF: ', treat it as keypad input that can appear mid-conversation. Expect a 4-digit code followed by '#', e.g., 'DTMF: 1234#'. When such input is received, extract the 4 digits and acknowledge them succinctly, then continue the conversation.",
             
-        },
+        }cd "/Users/tristanvandoorn@makerlab.nl/Documents/pipecat-cloud-images/pipecat-starters/twilio"
+
+git checkout feat/bot-iteraties,
     ]
 
     # Define and register tools as required

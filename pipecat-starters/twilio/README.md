@@ -7,7 +7,7 @@ A telephone-based conversational agent built with Pipecat that connects to Twili
 - Telephone voice conversations powered by:
   - Deepgram (STT)
   - OpenAI (LLM)
-  - Cartesia (TTS)
+  - ElevenLabs (TTS)
 - Voice activity detection with Silero
 - FastAPI WebSocket connection with Twilio
 - 8kHz audio sampling optimized for telephone calls
@@ -16,7 +16,8 @@ A telephone-based conversational agent built with Pipecat that connects to Twili
 
 - `OPENAI_API_KEY`
 - `DEEPGRAM_API_KEY`
-- `CARTESIA_API_KEY`
+- `ELEVENLABS_API_KEY`
+- `ELEVENLABS_VOICE_ID`
 - Twilio account with Media Streams configured
 
 ## Quick Customization
@@ -34,16 +35,9 @@ messages = [
 ]
 ```
 
-### Change Voice
+### Text-to-Speech provider
 
-Update the voice ID in the TTS service:
-
-```python
-tts = CartesiaTTSService(
-    api_key=os.getenv("CARTESIA_API_KEY"),
-    voice_id="79a125e8-cd45-4c13-8a67-188112f4dd22", # Change this
-)
-```
+De TTS-service gebruikt ElevenLabs. De API-sleutels moeten als environment variables beschikbaar zijn (`ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`).
 
 ### Adjust Audio Parameters
 
