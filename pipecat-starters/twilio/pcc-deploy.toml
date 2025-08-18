@@ -1,5 +1,5 @@
 agent_name = "twilio-agent-henk1"
-image = "docker.io/tristanvandoorn1/twilio-agent-henk1:0.5"
+image = "docker.io/tristanvandoorn1/twilio-agent-henk1:0.6"
 # image_credentials = "dockerhub-access"  # Optioneel: gebruik bij private registry
 secret_set = "openai-twilio-secrets"
 
