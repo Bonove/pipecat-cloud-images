@@ -23,6 +23,7 @@ from pipecat.runner.types import RunnerArguments
 from pipecat.runner.utils import parse_telephony_websocket
 from pipecat.services.elevenlabs.tts import ElevenLabsTTSService
 from pipecat.services.deepgram.stt import DeepgramSTTService
+from deepgram import LiveOptions
 from pipecat.services.openai.llm import OpenAILLMService
 from pipecat.transcriptions.language import Language
 from pipecat.transports.base_transport import BaseTransport
@@ -44,7 +45,12 @@ async def run_bot(transport: BaseTransport):
     # Swap out different processors or properties to customize your bot
     stt = DeepgramSTTService(
         api_key=os.getenv("DEEPGRAM_API_KEY"),
-        params=DeepgramSTTService.InputParams(language=Language.NL),
+        live_options=LiveOptions(
+            model="nova-3-general",
+            language="nl",
+            smart_format=True,
+            vad_events=True,
+        ),
     )
     llm = OpenAILLMService(api_key=os.getenv("OPENAI_API_KEY"), model="gpt-4o")
     tts = ElevenLabsTTSService(
