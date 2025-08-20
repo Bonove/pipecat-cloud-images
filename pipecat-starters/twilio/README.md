@@ -96,3 +96,36 @@ where:
 ## Deployment
 
 See the [top-level README](../README.md) for deployment instructions.
+
+## Pipecat Flows: Visual Editor en JSON-export
+
+Deze starter ondersteunt Pipecat Flows (Dynamic en Static Flows).
+
+- Loader: bij start probeert de bot automatisch `flows/export.json` te laden en te initialiseren via `FlowManager`.
+- Fallback: als er geen export is, worden Python-nodefabrieken gebruikt; als dat faalt, start de legacy kickoff.
+
+### Visual Editor lokaal draaien
+
+1. Clone de editor-repo (aparte map, buiten dit project is prima):
+
+```bash
+git clone https://github.com/pipecat-ai/pipecat-flows.git
+cd pipecat-flows/editor
+npm install
+npm run dev
+# Open http://localhost:5173
+```
+
+2. Ontwerp/aanpas je flow visueel en exporteer naar JSON.
+
+3. Plaats de export als `flows/export.json` in dit project:
+
+```bash
+cp /pad/naar/export.json /Users/tristanvandoorn@makerlab.nl/Documents/pipecat-cloud-images/pipecat-starters/twilio/flows/export.json
+```
+
+Bij de volgende start gebruikt de bot automatisch deze flow.
+
+Referenties:
+- Docs: Pipecat Flows [server docs](https://docs.pipecat.ai/server/frameworks/flows/pipecat-flows)
+- API: Actions [API](https://reference-flows.pipecat.ai/en/latest/api/pipecat_flows.actions.html)

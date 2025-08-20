@@ -1,3 +1,13 @@
+## Pipecat Flows integratieplan (v0.1)
+
+- Dependency: `git+https://github.com/pipecat-ai/pipecat-flows.git` aan `requirements.txt` toegevoegd.
+- Nieuwe module: `agents/flows.py` met Node-configs en function wrappers.
+- Aanpassen `bot.py`: FlowManager initialiseren en `on_client_connected` vervangen door `flow_manager.initialize(...)`.
+
+Open vragen:
+- Bevestig exact importpad `FlowManager`, `NodeConfig`, `ContextStrategy` zodra package is geïnstalleerd.
+- Finaliseer pre_actions/post_actions timing per node (TTS-orde bevestigd in docs).
+
 ## Implementatieplan — Pipecat integratie met OpenAI, Twilio en tools (N8N)
 
 Dit plan beschrijft hoe we de geoptimaliseerde system prompt en tools uit `docs/system_prompt.md` en `docs/tools.md` integreren in de bestaande Pipecat‑pipeline in `bot.py`, en hoe we dit testen en uitrollen.
