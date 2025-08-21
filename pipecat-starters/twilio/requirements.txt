@@ -1,5 +1,5 @@
 pipecatcloud>=0.2.1
-pipecat-ai[elevenlabs,krisp,openai,silero,deepgram,websocket,runner]>=0.0.79
+pipecat-ai[elevenlabs,openai,silero,deepgram,websocket,runner]>=0.0.79
 aiohttp>=3.9.5
 pipecat-ai-flows==0.0.18
 langdetect>=1.0.9
