@@ -147,6 +147,56 @@ def create_machine_help_node() -> "NodeConfig":
     )
 
 
+def create_human_handover_node() -> "NodeConfig":
+    transfer_call_fn = FlowsFunctionSchema(
+        name="transfer_call",
+        description="Draag het gesprek over naar een menselijke medewerker.",
+        properties={
+            "phone_number": {"type": "string", "description": "Telefoonnummer van de agent"},
+            "summary": {"type": "string", "description": "Samenvatting van het probleem"},
+            "pd_nr": {"type": "integer", "description": "Automaatnummer indien bekend"},
+            "location": {"type": "string", "description": "Locatie van de automaat indien bekend"},
+        },
+        required=["phone_number", "summary"],
+    )
+    
+    terugbelverzoek_fn = FlowsFunctionSchema(
+        name="terugbelverzoek",
+        description="Registreer een terugbelverzoek als overdracht mislukt.",
+        properties={
+            "telefoonnummer": {"type": "string", "description": "Telefoonnummer van de beller"},
+            "naam": {"type": "string", "description": "Voornaam van de beller"},
+            "achternaam": {"type": "string", "description": "Achternaam van de beller"},
+            "pd_nr": {"type": "integer", "description": "Automaatnummer indien bekend"},
+            "samenvatting": {"type": "string", "description": "Samenvatting van het probleem"},
+        },
+        required=["telefoonnummer", "naam", "achternaam", "samenvatting"],
+    )
+    
+    return NodeConfig(
+        name="human_handover",
+        task_messages=[
+            {
+                "role": "system",
+                "content": (
+                    "De beller heeft gevraagd om met een menselijke medewerker te spreken. "
+                    "Bevestig eerst: 'Begrijp ik goed dat u een collega wilt spreken?' "
+                    "Na bevestiging: "
+                    "1. Leg uit dat je het gesprek gaat overdragen. "
+                    "2. Verzamel een korte samenvatting van het probleem als je die nog niet hebt. "
+                    "3. Roep transfer_call aan met de samenvatting en beschikbare informatie. "
+                    "4. Als de transfer mislukt, bied aan om een terugbelverzoek te registreren. "
+                    "Vraag dan om naam, achternaam en telefoonnummer van de beller."
+                ),
+            }
+        ],
+        functions=[transfer_call_fn, terugbelverzoek_fn],
+        context_strategy=ContextStrategy.APPEND,
+        pre_actions=[],
+        post_actions=[],
+    )
+
+
 def create_finalize_node() -> "NodeConfig":
     rapportage_fn = FlowsFunctionSchema(
         name="rapportage_tool",
@@ -171,6 +221,7 @@ def build_flow_nodes(system_prompt_text: str) -> Dict[str, "NodeConfig"]:
         "general": create_general_cases_node(),
         "machine_specific": create_machine_specific_node(),
         "machine_help": create_machine_help_node(),
+        "human_handover": create_human_handover_node(),
         "finalize": create_finalize_node(),
     }
 
